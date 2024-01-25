@@ -1,0 +1,25 @@
+.nav-link .active {
+    background-color: transparent !important;
+    color: black !important;
+    text-decoration: underline;
+}
+
+@media screen and (max-width: 768px) {
+    .nav-link .active {
+        color: black !important;
+    }
+}
+
+
+/* .dash-item .active {
+    background-color: transparent !important;
+    color: black !important;
+    text-decoration: underline;
+}
+
+@media screen and (max-width: 768px) {
+    .dash-item .active {
+        color: black !important;
+    }
+} */
+
