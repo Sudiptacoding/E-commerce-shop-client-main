@@ -7,6 +7,7 @@ import { Rating } from "@mui/material";
 import UseMenus from "../../hooks/UseMenus";
 import { useState } from "react";
 import NodataHere from "../../common/NodataHere";
+import StarRatings from "react-star-ratings";
 
 
 const Shop = () => {
@@ -23,6 +24,9 @@ const Shop = () => {
         const filteredArray = menus?.filter(number => number?.price >= firstValue && number?.price <= secondValue);
         setMenu(filteredArray);
     }
+    const allPrice = () => {
+        setMenu(menus);
+    }
 
     const filterData = (cata) => {
         const filtercategory = menus?.filter(item => item?.category === cata);
@@ -30,11 +34,12 @@ const Shop = () => {
     }
 
     const filterDataRating = (cata) => {
-        const filtercategory = menus?.filter(item => item?.ratting === cata);
+        const filtercategory = menus?.filter(item => item?.adminRating === parseInt(cata));
         setMenu(filtercategory);
     }
 
     const filterDataSize = (size) => {
+        console.log(size)
         const filtercategory = menus?.filter(item => item?.size === size);
         setMenu(filtercategory);
     }
@@ -89,6 +94,10 @@ const Shop = () => {
                         <div class="flex items-center gap-2 mb-4">
                             <input onChange={(e) => filterValue(e.target.value)} id="default-radio-1" type="radio" value="120-200" name="default-radio" class="w-6 h-6 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                             <h1 className="text-base font-bold text-gray-600 font-rubik hover:underline">120-200</h1>
+                        </div>
+                        <div class="flex items-center gap-2 mb-4">
+                            <input onChange={(e) => allPrice()} id="default-radio-1" type="radio" value="120-200" name="default-radio" class="w-6 h-6 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                            <h1 className="text-base font-bold text-gray-600 font-rubik hover:underline">201 ++</h1>
                         </div>
                     </div>
 
@@ -166,23 +175,23 @@ const Shop = () => {
                     <div className="pt-6">
                         <h1 className="pb-3 text-lg font-bold font-rubik">Size</h1>
                         <div class="flex items-center gap-2 mb-4">
-                            <input onChange={(e) => filterDataSize(e.target.value)} id="default-radio-1" type="radio" value="SM" name="default-radio" class="w-6 h-6 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                            <input onChange={(e) => filterDataSize(e.target.value)} id="default-radio-1" type="radio" value="sm" name="default-radio" class="w-6 h-6 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                             <h1 className="text-base font-bold text-gray-600 font-rubik hover:underline">SM</h1>
                         </div>
                         <div class="flex items-center gap-2 mb-4">
-                            <input onChange={(e) => filterDataSize(e.target.value)} id="default-radio-1" type="radio" value="XL" name="default-radio" class="w-6 h-6 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                            <input onChange={(e) => filterDataSize(e.target.value)} id="default-radio-1" type="radio" value="xl" name="default-radio" class="w-6 h-6 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                             <h1 className="text-base font-bold text-gray-600 font-rubik hover:underline">XL</h1>
                         </div>
                         <div class="flex items-center gap-2 mb-4">
-                            <input onChange={(e) => filterDataSize(e.target.value)} id="default-radio-1" type="radio" value="S" name="default-radio" class="w-6 h-6 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                            <input onChange={(e) => filterDataSize(e.target.value)} id="default-radio-1" type="radio" value="s" name="default-radio" class="w-6 h-6 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                             <h1 className="text-base font-bold text-gray-600 font-rubik hover:underline">S</h1>
                         </div>
                         <div class="flex items-center gap-2 mb-4">
-                            <input onChange={(e) => filterDataSize(e.target.value)} id="default-radio-1" type="radio" value="M" name="default-radio" class="w-6 h-6 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                            <input onChange={(e) => filterDataSize(e.target.value)} id="default-radio-1" type="radio" value="m" name="default-radio" class="w-6 h-6 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                             <h1 className="text-base font-bold text-gray-600 font-rubik hover:underline">M</h1>
                         </div>
                         <div class="flex items-center gap-2 mb-4">
-                            <input onChange={(e) => filterDataSize(e.target.value)} id="default-radio-1" type="radio" value="L" name="default-radio" class="w-6 h-6 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                            <input onChange={(e) => filterDataSize(e.target.value)} id="default-radio-1" type="radio" value="l" name="default-radio" class="w-6 h-6 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                             <h1 className="text-base font-bold text-gray-600 font-rubik hover:underline">L</h1>
                         </div>
                     </div>
@@ -222,12 +231,14 @@ const Shop = () => {
                                                     <img className="w-full rounded-xl" src={item.image} alt="" />
                                                 </Link>
                                                 <div>
-                                                    <h1 className="text-xl font-bold">{item.name}</h1>
+                                                    <h1 className="text-xl font-bold">{item.name?.length > 30 ? item.name?.slice(0, 30) + '...' : item.name}</h1>
                                                     <div className="flex justify-between pt-2 pb-1">
                                                         <h2 className="card-title">
-                                                            <Rating style={{ maxWidth: 115 }}
-                                                                value={item.ratting}
-                                                                readOnly />
+                                                            <StarRatings
+                                                                rating={item?.adminRating}
+                                                                starDimension="25px"
+                                                                starSpacing="5px"
+                                                            />
                                                         </h2>
                                                     </div>
                                                     <div className="flex items-center justify-between">

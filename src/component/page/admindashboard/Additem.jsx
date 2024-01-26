@@ -3,8 +3,12 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { TiDelete } from "react-icons/ti";
 import UserAxiosSecure from "../../hooks/UserAxiosSecure";
+import Swal from "sweetalert2";
+import UseMenus from "../../hooks/UseMenus";
+import StarRatings from "react-star-ratings";
 
 const Additem = () => {
+    const [menus, refetch, loading] = UseMenus()
     const axiosData = UserAxiosSecure()
     const [image1, setImage1] = useState('')
     const [image2, setImage2] = useState('')
@@ -58,22 +62,35 @@ const Additem = () => {
             });
     }
 
+    const [ratings, setRating] = useState(0)
+
     const handelSubmit = (e) => {
         e.preventDefault()
         if (image1 && image2 && image3 && image4) {
             const name = e.target.name.value;
-            const price = parseFloat(e.target.price.value);
+            const price = parseInt(e.target.price.value);
             const title = e.target.title.value;
             const category = e.target.category.value;
             const size = e.target.size.value;
             const details = e.target.details.value;
+            const adminRating = ratings || 0;
             const rating = 0;
             const customerReviews = [];
             const image = [image1, image2, image3, image4]
-            const data = { name, price, title, category, details, image, rating, customerReviews, size }
+            const data = { name, price, title, category, details, image, rating, customerReviews, size, adminRating }
             axiosData.post('/item', data)
                 .then(res => {
-                    console.log(res.data)
+                    refetch()
+                    Swal.fire({
+                        title: "Good job!",
+                        text: "You clicked the button!",
+                        icon: "success"
+                    });
+                    e.target.reset()
+                    setImage1('')
+                    setImage2('')
+                    setImage3('')
+                    setImage4('')
                 })
         } else {
             toast.error("Please upload your images")
@@ -167,6 +184,19 @@ const Additem = () => {
                             className="h-24 textarea textarea-bordered"
                             placeholder="add details about product"></textarea>
                     </label>
+                    <label className="form-control">
+                        <div className="label">
+                            <span className="text-lg font-medium">Product rating</span>
+                        </div>
+                        <StarRatings
+                            rating={ratings}
+                            starRatedColor="blue"
+                            changeRating={setRating}
+                            numberOfStars={5}
+                            name='rating'
+                        />
+                    </label>
+
                     <div class=" py-5">
                         <div class="flex items-center justify-center flex-wrap gap-4">
                             <div className="relative overflow-hidden">

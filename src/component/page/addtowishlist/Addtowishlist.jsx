@@ -7,16 +7,15 @@ import Swal from 'sweetalert2';
 import { useLoaderData } from 'react-router-dom';
 import UseAuth from '../../hooks/UseAuth';
 import UserAxiosSecure from '../../hooks/UserAxiosSecure';
+import useAllAddtoCard from '../../hooks/useAllAddtoCard';
 
 const Addtowishlist = () => {
     const { user } = UseAuth();
-    console.log(user)
     const data = useLoaderData();
-    const [menusdetail, setMenusdetail] = useState(data)
     const axiosData = UseAxiosPublic()
     const axiosSecure = UserAxiosSecure();
-    const [menusdetails, setMenusdetails] = useState({})
-    const { isPending, error, addtolove: addtocard, refetch } = useAllAddtoLove()
+    const { addtolove: addtocard, refetch } = useAllAddtoLove()
+    const { refetch: addcardreface } = useAllAddtoCard()
 
 
 
@@ -44,30 +43,32 @@ const Addtowishlist = () => {
         });
     }
 
-    useEffect(() => {
-        console.log('i am all page')
-    }, [data])
-
-
-    const handelDetails = (item) => {
-        setMenusdetails(item)
-        document.getElementById('my_modal_10').showModal()
-    }
-
 
     const handleaddtoCart = (item) => {
         const email = user?.email;
         const { _id, ...dataWithoutId } = item;
         const data = { ...dataWithoutId, email };
-        console.log(data)
         axiosSecure.post('/addtocart', data)
+            .then(res => {
+                addcardreface()
+                Swal.fire({
+                    title: "Good job!",
+                    text: "Item successfully added",
+                    icon: "success"
+                });
+            })
+    }
+
+    const handelAllClear = () => {
+        const email = user?.email;
+        axiosSecure.get(`/allloveclear?email=${email}`)
             .then(res => {
                 Swal.fire({
                     title: "Good job!",
                     text: "Item successfully added",
                     icon: "success"
                 });
-                document.getElementById('my_modal_10').close()
+                refetch()
             })
     }
 
@@ -88,7 +89,7 @@ const Addtowishlist = () => {
                                 <th scope="col" class="px-6 py-3">
                                     Quantity
                                 </th>
-                                <th scope="col" class="px-6 py-3">
+                                <th onClick={() => handelAllClear()} scope="col" class="px-6 py-3">
                                     <button className="bg-black px-6 py-3 text-white text-sm font-medium ">Clear Cart</button>
                                 </th>
                             </tr>
@@ -105,14 +106,14 @@ const Addtowishlist = () => {
                                             {item?.price}
                                         </td>
                                         <td class="px-6 py-4">
-                                            <button onClick={() => handleaddtoCart(menusdetails)} className="md:px-4 sm:px-4 px-2 lg:px-4 lg:py-2 md:py-2 sm:py-2 py-1 md:text-base border-2  hover:border-black hover:bg-black hover:text-white font-rubik">Add to Cart</button>
+                                            <button onClick={() => handleaddtoCart(item)} className="md:px-4 sm:px-4 px-2 lg:px-4 lg:py-2 md:py-2 sm:py-2 py-1 md:text-base border-2  hover:border-black hover:bg-black hover:text-white font-rubik">Add to Cart</button>
                                         </td>
                                         <td class="px-6 py-4">
-                                                    <button onClick={() => handelDeletCard(item?._id)}
-                                                        className="bg-[#ffffff56] flex items-center font-bold gap-2 bg-slate-200 hover:text-white md:p-4 sm:p-4  lg:p-4 p-2 rounded-md hover:bg-red-600">
-                                                        <MdDelete className="text-gray-800 border"></MdDelete> Remove
-                                                    </button>
-                                                </td>
+                                            <button onClick={() => handelDeletCard(item?._id)}
+                                                className="bg-[#ffffff56] flex items-center font-bold gap-2 bg-slate-200 hover:text-white md:p-4 sm:p-4  lg:p-4 p-2 rounded-md hover:bg-red-600">
+                                                <MdDelete className="text-gray-800 border"></MdDelete> Remove
+                                            </button>
+                                        </td>
                                     </tr>
                                 </tbody>
                             )

@@ -21,13 +21,17 @@ import UserAxiosSecure from "../../hooks/UserAxiosSecure";
 import UseAxiosPublic from "../../hooks/UseAxiosPublic";
 import Swal from "sweetalert2";
 import UseMenus from "../../hooks/UseMenus";
+import StarRatings from "react-star-ratings";
+import useAllAddtoLove from "../../hooks/useAllAddtoLove";
+import useAllAddtoCard from "../../hooks/useAllAddtoCard";
 
 
 const MenusDetails = (cata) => {
     const [menus] = UseMenus();
+    const { refetch: lovereface } = useAllAddtoLove()
+    const { refetch: addcardreface } = useAllAddtoCard()
 
     const { user } = UseAuth();
-
     const axiosData = UseAxiosPublic()
     const axiosSecure = UserAxiosSecure();
     const [selectedQuantity, setSelectedQuantity] = useState(1);
@@ -56,12 +60,13 @@ const MenusDetails = (cata) => {
         console.log(data)
         axiosSecure.post('/addtocart', data)
             .then(res => {
+                addcardreface()
                 Swal.fire({
                     title: "Good job!",
                     text: "Item successfully added",
                     icon: "success"
                 });
-                document.getElementById('my_modal_10').close()
+
             })
     }
 
@@ -72,12 +77,13 @@ const MenusDetails = (cata) => {
         const data = { ...dataWithoutId, email };
         axiosSecure.post('/addtolove', data)
             .then(res => {
+                lovereface()
                 Swal.fire({
                     title: "Good job!",
                     text: "Item successfully added",
                     icon: "success"
                 });
-                document.getElementById('my_modal_10').close()
+
             })
     }
 
@@ -116,9 +122,11 @@ const MenusDetails = (cata) => {
                     <h1 className="py-2 text-lg font-medium font-rubik">Cattegory: <span className="text-xl font-bold font-rubik">{menusdetail?.category}</span> </h1>
                     <h1 className="py-1 text-2xl text-gray-600 font-rubik">{menusdetail?.title}</h1>
                     <h2 className="card-title">
-                        <Rating style={{ maxWidth: 115 }}
-                            value={menusdetail?.ratting}
-                            readOnly />
+                        <StarRatings
+                            rating={menusdetail?.adminRating}
+                            starDimension="25px"
+                            starSpacing="5px"
+                        />
                     </h2>
                     <h1 className="py-2 text-2xl font-bold font-rubik">${menusdetail?.price}</h1>
                     <h1 className="pt-2 pb-2 text-xl font-bold font-rubik">Select Size</h1>
@@ -206,22 +214,23 @@ const MenusDetails = (cata) => {
                                                 <p className="bg-teal-50 rounded-md text-lg text-[#41b6bf] font-bold w-fit px-2">{index + 1}</p>
                                                 <div className="w-full gap-16 pt-8 pb-8 md:flex">
                                                     <div className="flex items-center gap-4">
-                                                        <img className="w-16 h-16 rounded-full" src={member2} alt="" />
+                                                        <img className="w-16 h-16 rounded-full" src={review?.profileimg} alt="" />
                                                         <div>
-                                                            <h1 className="font-bold pb-2 text-xl w-[200px]">{review.name}</h1>
+                                                            <h1 className="font-bold pb-2 text-xl w-[200px]">{review?.name}</h1>
                                                             <h2 className="card-title">
-                                                                <Rating style={{ maxWidth: 115 }}
-                                                                    value={review.ratting}
-                                                                    readOnly />
+                                                                <StarRatings
+                                                                    rating={review?.rating}
+                                                                    starDimension="25px"
+                                                                    starSpacing="5px"
+                                                                />
                                                             </h2>
                                                         </div>
                                                     </div>
 
                                                     <div className="">
                                                         <div className=" gap-9 text-">
-                                                            <h1 className="pb-4 text-xl font-medium text-black">{review.title}</h1>
+                                                            <h1 className="pb-4 text-xl font-medium text-black">{review?.description}</h1>
                                                             <div className="grid grid-cols-2">
-                                                                <p>{review.description}</p>
                                                                 <p className="justify-start w-full ">{review.date}</p>
                                                             </div>
                                                         </div>
@@ -247,12 +256,12 @@ const MenusDetails = (cata) => {
                 <div className="grid items-center gap-6 pt-6 pb-12 md:grid-cols-4">
                     {
                         sameMenu?.map(detail =>
-                            <div onClick={() => handelDetails(detail)} key={detail.id}>
+                            <div onClick={() => handelDetails(detail)} key={detail._id}>
                                 <div >
-                                    <img className="w-full rounded-xl" src={detail.image} alt="" />
+                                    <img className="w-full rounded-xl" src={detail?.image} alt="" />
                                 </div>
                                 <div>
-                                    <h1 className="text-xl font-bold">{detail.name}</h1>
+                                    <h1 className="text-xl font-bold">{detail?.name?.length > 30 ? detail.name?.slice(0, 30) + '...' : detail.name}</h1>
                                     <div className="flex items-center justify-between">
                                         <h1 className="text-lg font-bold">${detail.price}</h1>
                                         <div className=" bg-[#edededb1] p-3 rounded-full left-14 ">

@@ -5,16 +5,30 @@ import NodataHere from "../../common/NodataHere";
 import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import UseAuth from "../../hooks/UseAuth";
+import UserAxiosSecure from "../../hooks/UserAxiosSecure";
 
 
 
 const AddtoCart = () => {
+    const { user } = UseAuth();
+    const axiosSecure = UserAxiosSecure();
+
+    const [increase, setIncrease] = useState([])
+    console.log(increase)
+
+
     const [menusdetails, setMenusdetails] = useState({})
+
     const [selectedQuantity, setSelectedQuantity] = useState(1);
     const axiosData = UseAxiosPublic()
     const { isPending, error, addtocard, refetch } = useAllAddtoCard()
     const totalPrice = addtocard?.reduce((total, item) => total + parseFloat(item.price), 0);
     console.log(totalPrice)
+
+    const handelCount = (item, i) => {
+        console.log(item, i)
+    }
 
     const handelDeletCard = (id) => {
         Swal.fire({
@@ -42,7 +56,8 @@ const AddtoCart = () => {
 
 
     // delete all card
-    const handleClearCart  = (id) => {
+    const handleClearCart = (id) => {
+        const email = user?.email;
         Swal.fire({
             title: "Are you sure?",
             text: "You won't be able to revert this!",
@@ -53,11 +68,11 @@ const AddtoCart = () => {
             confirmButtonText: "Yes, delete it!"
         }).then((result) => {
             if (result.isConfirmed) {
-                axiosData.delete('/addtocart',)
+                axiosSecure.get(`/allcardclear?email=${email}`)
                     .then(res => {
                         Swal.fire({
-                            title: "Deleted!",
-                            text: "Your item has been deleted.",
+                            title: "Good job!",
+                            text: "Item successfully added",
                             icon: "success"
                         });
                         refetch()
@@ -67,11 +82,6 @@ const AddtoCart = () => {
     }
 
 
-    const handelDetails = (item) => {
-        setMenusdetails(item)
-        document.getElementById('my_modal_10').showModal()
-    }
-
     // 
     const handelBuyNow = (item) => {
         axiosSecure.post('/buynow', item)
@@ -79,6 +89,10 @@ const AddtoCart = () => {
                 window.location.replace(res.data.url)
             })
     }
+
+
+
+
 
     return (
         <div className="pt-16 container h-[1200px] mx-auto px-4">
@@ -100,12 +114,12 @@ const AddtoCart = () => {
                                             Quantity
                                         </th>
                                         <th scope="col" class="px-6 py-3">
-                                            <button onClick={() => handleClearCart(addtocard?.item)} className="bg-black px-6 py-3 text-white text-sm font-medium ">Clear Cart</button>
+                                            <button onClick={() => handleClearCart()} className="bg-black px-6 py-3 text-white text-sm font-medium ">Clear Cart</button>
                                         </th>
                                     </tr>
                                 </thead>
                                 {
-                                    addtocard?.map(item =>
+                                    addtocard?.map((item, i) =>
                                         <tbody key={item._id}>
                                             <tr>
                                                 <th scope="row" class="px-6 py-4 lg:flex items-center gap-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
@@ -117,7 +131,16 @@ const AddtoCart = () => {
                                                 </td>
                                                 <td class="px-6 py-4">
                                                     <div className="flex">
+
+
                                                         <div className="text-center border rounded-md ">
+                                                            <button
+                                                                onClick={() => handelCount(item, i)}
+                                                                className="lg:px-2 md:px-2 sm:px-2 pt-0 pb-1 text-xl border-r-2">-</button> <span className="px-2 py-2 text-xl">2</span> <button
+
+                                                                    className="lg:px-2 md:px-2 sm:px-2 pt-0 pb-1 text-xl border-l-2 ">+</button>
+                                                        </div>
+                                                        {/* <div className="text-center border rounded-md ">
                                                             <button onClick={() => {
                                                                 selectedQuantity > 1 && setSelectedQuantity(selectedQuantity - 1)
                                                             }}
@@ -126,7 +149,11 @@ const AddtoCart = () => {
                                                                         selectedQuantity < 10 && setSelectedQuantity(selectedQuantity + 1)
                                                                     }}
                                                                     className="lg:px-2 md:px-2 sm:px-2 pt-0 pb-1 text-xl border-l-2 ">+</button>
-                                                        </div>
+                                                        </div> */}
+
+
+
+
                                                     </div>
                                                 </td>
                                                 <td class="px-6 py-4">

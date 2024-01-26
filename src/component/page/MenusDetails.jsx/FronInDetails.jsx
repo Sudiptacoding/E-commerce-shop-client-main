@@ -4,11 +4,12 @@ import toast from "react-hot-toast"
 import StarRatings from "react-star-ratings"
 import { AuthContext } from "../../provider/AuthProvider"
 import UseAxiosPublic from "../../hooks/UseAxiosPublic"
+import UseMenus from "../../hooks/UseMenus"
 
 
 const FronInDetails = ({ id }) => {
+    const [menus, refetch, loading] = UseMenus()
     const { user } = useContext(AuthContext)
-    console.log(user)
     const axiosData = UseAxiosPublic()
     const [ratings, setRating] = useState(0)
     const handelSubmit = (e) => {
@@ -25,7 +26,10 @@ const FronInDetails = ({ id }) => {
 
         axiosData.patch(`/sameitems/${id}`, data)
             .then(res => {
-                console.log(res.data)
+                toast.success('Successfully added review!')
+                refetch()
+                e.target.reset()
+                setRating(0)
             })
     }
 
