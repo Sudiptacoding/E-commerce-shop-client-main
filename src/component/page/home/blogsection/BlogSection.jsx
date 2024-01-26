@@ -6,7 +6,7 @@ import UseBlogs from "../../../hooks/UseBlogs";
 
 const BlogSection = () => {
     const [blogs] = UseBlogs();
-    const blog = blogs.filter(item => item.category === 'blog');
+    // const blog = blogs.filter(item => item.category === 'blog');
 
     return (
         <div data-aos="fade-up"
@@ -18,7 +18,7 @@ const BlogSection = () => {
             {/* blog cart */}
             <div className="grid md:grid-cols-3 pt-3 gap-6 items-center">
                 {
-                    blog.map(item =>
+                    blogs.map(item =>
                         <div key={item.id} className="">
                             <Link to={`/blogdetails/${item._id}`}>
                                 <img className="w-full  h-[260px] rounded-xl" src={item.image1} alt="" />
@@ -43,7 +43,7 @@ const BlogSection = () => {
                                         <p>{item.name}</p>
                                     </div>
                                 </div>
-                                <h1 className="text-xl font-bold pt-2">{item.title}</h1>
+                                {/* <h1 className="text-xl font-bold pt-2">{item.title}</h1> */}
                             </div>
                         </div>
                     )

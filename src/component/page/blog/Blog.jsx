@@ -9,7 +9,7 @@ const Blog = () => {
     const [blogs] = UseBlogs();
 
     return (
-        <div className='container mx-auto'>
+        <div className='container mx-auto h-screen'>
             {/* banner */}
             <div className="text-center py-24" style={{ backgroundImage: `url(${banner})` }}>
                 <Link to="/">
@@ -48,7 +48,7 @@ const Blog = () => {
                                             <p>{item.name}</p>
                                         </div>
                                     </div>
-                                    <h1 className="text-xl font-bold pt-2">{item.title}</h1>
+                                    {/* <h1 className="text-xl font-bold pt-2">{item.title}</h1> */}
                                 </div>
                             </div>
                         </div>

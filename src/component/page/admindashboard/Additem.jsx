@@ -153,10 +153,10 @@ const Additem = () => {
                             </label>
                             <select name="category" defaultValue="default" {...('category', { required: true })}
                                 className="w-full select select-bordered">
-                                <option value="hoodie">shirt</option>
-                                <option value="shirt">Beg</option>
+                                <option value="shirt">shirt</option>
+                                <option value="Beg">Beg</option>
                                 <option value="t-shirt">T-shirt</option>
-                                <option value="beg">hoodi</option>
+                                <option value="hoodie">hoodie</option>
                                 <option value="cap">cap</option>
                             </select>
                         </div>

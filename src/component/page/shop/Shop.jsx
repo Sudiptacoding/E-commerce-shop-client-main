@@ -1,19 +1,38 @@
-import { Link } from "react-router-dom"
+import { Link, useLoaderData } from "react-router-dom"
 import banner from "../../../../public/image/banner.png"
 import { IoMdMenu } from "react-icons/io";
 import { CgMenuGridR } from "react-icons/cg";
 import { LuShoppingCart } from "react-icons/lu";
 import { Rating } from "@mui/material";
 import UseMenus from "../../hooks/UseMenus";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import NodataHere from "../../common/NodataHere";
 import StarRatings from "react-star-ratings";
+import UserAxiosSecure from "../../hooks/UserAxiosSecure";
+import UseAuth from "../../hooks/UseAuth";
 
 
 const Shop = () => {
     const [menus] = UseMenus();
     console.log(menus)
     const [menu, setMenu] = useState(menus)
+    const { user } = UseAuth();
+    console.log(user)
+    const data = useLoaderData();
+    const [menusdetail, setMenusdetail] = useState(data)
+    const [menusdetails, setMenusdetails] = useState({})
+    const axiosSecure = UserAxiosSecure();
+
+
+    // for pagination
+    const [currentPage, setCurrentPage] = useState(1)
+    const recordesPerpage = 6;
+    const lastIndex = currentPage * recordesPerpage;
+    const firstIndex = lastIndex - recordesPerpage;
+    const records = menu.slice(firstIndex, lastIndex);
+    const npage = Math.ceil(menu.length / recordesPerpage)
+    const numbers = [...Array(npage + 1).keys()].slice(1)
+
 
 
     const filterValue = (e) => {
@@ -43,6 +62,28 @@ const Shop = () => {
         const filtercategory = menus?.filter(item => item?.size === size);
         setMenu(filtercategory);
     }
+
+    useEffect(() => {
+        console.log('i am all page')
+    }, [data])
+
+    // 
+    const handleaddtoCart = (item) => {
+        const email = user?.email;
+        const { _id, ...dataWithoutId } = item;
+        const data = { ...dataWithoutId, email };
+        console.log(data)
+        axiosSecure.post('/addtocart', data)
+            .then(res => {
+                Swal.fire({
+                    title: "Good job!",
+                    text: "Item successfully added",
+                    icon: "success"
+                });
+                document.getElementById('my_modal_10').close()
+            })
+    }
+
 
 
     return (
@@ -225,7 +266,7 @@ const Shop = () => {
                                 <div data-aos="fade-up"
                                     data-aos-anchor-placement="top-center" className="grid items-center gap-6 pt-6 md:grid-cols-3 pb-14">
                                     {
-                                        menu.map(item =>
+                                        records.map(item =>
                                             <div className="">
                                                 <Link to={`/menusdetails/${item?._id}`}>
                                                     <img className="w-full rounded-xl" src={item.image} alt="" />
@@ -242,10 +283,12 @@ const Shop = () => {
                                                         </h2>
                                                     </div>
                                                     <div className="flex items-center justify-between">
-                                                        <h1 className="text-lg font-bold">{item.price}</h1>
-                                                        <div className=" bg-[#edededb1] p-3 rounded-full left-14 ">
-                                                            <LuShoppingCart />
-                                                        </div>
+                                                        <h1 className="text-lg font-bold">${item.price}</h1>
+                                                        <button>
+                                                            <div onClick={() => handleaddtoCart(menusdetails)} className=" bg-[#edededb1] p-3 rounded-full left-14 ">
+                                                                <LuShoppingCart />
+                                                            </div>
+                                                        </button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -262,8 +305,48 @@ const Shop = () => {
 
                 </div>
             </div>
+
+
+            <nav>
+                <ul className="pagination justify-center pb-16 flex gap-2">
+                    <li className="page-item">
+                        <a href="#" className="page-link border-2 px-6 font-bold hover:bg-orange-600 hover:text-white hover:border-orange-600 py-2"
+                            onClick={prePage}
+                        >Prev</a>
+                    </li>
+                    {
+                        numbers.map((n, i) => (
+                            <li className={`page-item ${currentPage === n ? 'active' : ''}`} key={i}>
+                                <a href="#" className="page-link border-2 px-5 font-bold hover:bg-orange-600 hover:text-white hover:border-orange-600 py-2"
+                                    onClick={() => changeCPage(n)}>{n}</a>
+                            </li>
+                        ))
+                    }
+                    <li className="page-item">
+                        <a href="#" className="page-link border-2 px-6 font-bold hover:bg-orange-600 hover:text-white hover:border-orange-600 py-2"
+                            onClick={nextPage}
+                        >Next</a>
+                    </li>
+                </ul>
+            </nav>
         </div>
     )
+
+    function prePage() {
+        if (currentPage !== 1) {
+            setCurrentPage(currentPage - 1)
+        }
+    }
+
+    function changeCPage(id) {
+        setCurrentPage(id)
+    }
+
+    function nextPage() {
+        if (currentPage !== npage) {
+            setCurrentPage(currentPage + 1)
+        }
+    }
 }
 
 export default Shop

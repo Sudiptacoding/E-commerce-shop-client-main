@@ -31,7 +31,7 @@ const BlogDetails = () => {
                     <p>{data.name}</p>
                 </div>
             </div>
-            <h1 className='text-4xl font-rubik pt-4 font-bold py-3'>{data.title}</h1>
+            <h1 className='text-xl font-rubik pt-4 font-normal py-3'>{data.title}</h1>
             <h1>{data.details}</h1>
             <p></p>
         </div>
