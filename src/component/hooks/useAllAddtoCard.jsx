@@ -5,7 +5,6 @@ import { AuthContext } from '../provider/AuthProvider';
 
 const useAllAddtoCard = () => {
     const { user, loading } = useContext(AuthContext)
-    console.log(user)
     const axiosData = UseAxiosPublic();
     const { isPending, error, data: addtocard, refetch } = useQuery({
         queryKey: ['addtocartitem'],

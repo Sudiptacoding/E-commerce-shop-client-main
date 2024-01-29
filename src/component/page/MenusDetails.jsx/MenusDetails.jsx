@@ -88,7 +88,7 @@ const MenusDetails = (cata) => {
     }
 
     const handelBuyNow = (item) => {
-        axiosSecure.post('/buynow', item)
+        axiosSecure.post('/buynow', [{ ...item, quantity: selectedQuantity }])
             .then(res => {
                 window.location.replace(res.data.url)
             })

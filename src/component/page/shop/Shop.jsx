@@ -308,22 +308,22 @@ const Shop = () => {
 
 
             <nav>
-                <ul className="pagination justify-center pb-16 flex gap-2">
+                <ul className="flex justify-center gap-2 pb-16 pagination">
                     <li className="page-item">
-                        <a href="#" className="page-link border-2 px-6 font-bold hover:bg-orange-600 hover:text-white hover:border-orange-600 py-2"
+                        <a  className="px-6 py-2 font-bold border-2 page-link hover:bg-orange-600 hover:text-white hover:border-orange-600"
                             onClick={prePage}
                         >Prev</a>
                     </li>
                     {
                         numbers.map((n, i) => (
                             <li className={`page-item ${currentPage === n ? 'active' : ''}`} key={i}>
-                                <a href="#" className="page-link border-2 px-5 font-bold hover:bg-orange-600 hover:text-white hover:border-orange-600 py-2"
+                                <a  className="px-5 py-2 font-bold border-2 page-link hover:bg-orange-600 hover:text-white hover:border-orange-600"
                                     onClick={() => changeCPage(n)}>{n}</a>
                             </li>
                         ))
                     }
                     <li className="page-item">
-                        <a href="#" className="page-link border-2 px-6 font-bold hover:bg-orange-600 hover:text-white hover:border-orange-600 py-2"
+                        <a  className="px-6 py-2 font-bold border-2 page-link hover:bg-orange-600 hover:text-white hover:border-orange-600"
                             onClick={nextPage}
                         >Next</a>
                     </li>
