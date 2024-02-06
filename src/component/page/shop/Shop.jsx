@@ -14,10 +14,8 @@ import UseAuth from "../../hooks/UseAuth";
 
 const Shop = () => {
     const [menus] = UseMenus();
-    console.log(menus)
     const [menu, setMenu] = useState(menus)
     const { user } = UseAuth();
-    console.log(user)
     const data = useLoaderData();
     const [menusdetail, setMenusdetail] = useState(data)
     const [menusdetails, setMenusdetails] = useState({})
@@ -39,7 +37,6 @@ const Shop = () => {
         const rangeValues = e?.split('-');
         const firstValue = rangeValues ? rangeValues[0] : null;
         const secondValue = rangeValues ? rangeValues[1] : null;
-        console.log(firstValue, secondValue);
         const filteredArray = menus?.filter(number => number?.price >= firstValue && number?.price <= secondValue);
         setMenu(filteredArray);
     }
@@ -53,21 +50,31 @@ const Shop = () => {
     }
 
     const filterDataRating = (cata) => {
-        const filtercategory = menus?.filter(item => item?.adminRating === parseInt(cata));
+        const filtercategory = menus?.filter(item => item?.rating === parseInt(cata));
         setMenu(filtercategory);
     }
 
     const filterDataSize = (size) => {
-        console.log(size)
         const filtercategory = menus?.filter(item => item?.size === size);
         setMenu(filtercategory);
     }
 
-    useEffect(() => {
-        console.log('i am all page')
-    }, [data])
+    const handelSearch = (e) => {
+        const filtercategory = menus?.filter(item => item?.name.includes(e));
+        setMenu(filtercategory);
+    }
 
-    // 
+    const handelSort = (e) => {
+        if (e === 'high') {
+            const filtercategory = menus?.sort((a, b) => b?.price - a?.price);
+            setMenu(filtercategory)
+        } else if (e === 'low') {
+            const filtercategory = menus?.sort((a, b) => a?.price - b?.price);
+            setMenu(filtercategory)
+        }
+    }
+
+
     const handleaddtoCart = (item) => {
         const email = user?.email;
         const { _id, ...dataWithoutId } = item;
@@ -84,7 +91,7 @@ const Shop = () => {
             })
     }
 
-
+    const [handelGrid, setHandelGrid] = useState(false)
 
     return (
         <div className="container mx-auto">
@@ -108,8 +115,8 @@ const Shop = () => {
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
                                 </svg>
                             </div>
-                            <input type="search" id="default-search" class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search Mockups, Logos..." required />
-                            <button type="submit" class="text-white absolute end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Search</button>
+                            <input onChange={(e) => handelSearch(e.target.value)} type="search" id="default-search" class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search Mockups, Logos..." required />
+                            <button type="button" class="text-white absolute end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Search</button>
                         </div>
                     </form>
 
@@ -243,17 +250,17 @@ const Shop = () => {
                     <div className="flex items-center justify-between h-fit">
                         <div className="flex items-center gap-2">
                             <div>
-                                <CgMenuGridR className="p-1 text-4xl border hover:bg-black hover:text-white" />
+                                <CgMenuGridR onClick={() => setHandelGrid(false)} className={`${!handelGrid ? 'p-1 text-4xl border bg-black text-white' : 'p-1 text-4xl border'}`} />
                             </div>
                             <div>
-                                <IoMdMenu className="p-1 text-4xl border hover:bg-black hover:text-white" />
+                                <IoMdMenu onClick={() => setHandelGrid(true)} className={`${!handelGrid ? 'p-1 text-4xl border ' : 'p-1 text-4xl border bg-black text-white'}`} />
                             </div>
                         </div>
                         <div>
-                            <select id="countries" class="bg-gray-50 border  border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <select onChange={(e) => handelSort(e.target.value)} id="countries" class="bg-gray-50 border  border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                 <option selected>What do you want</option>
-                                <option value="CA">high</option>
-                                <option value="FR">less</option>
+                                <option value="high">high</option>
+                                <option value="low">less</option>
                             </select>
                         </div>
                     </div>
@@ -264,7 +271,7 @@ const Shop = () => {
                         {
                             menu?.length > 0 ? <div>
                                 <div data-aos="fade-up"
-                                    data-aos-anchor-placement="top-center" className="grid items-center gap-6 pt-6 md:grid-cols-3 pb-14">
+                                    data-aos-anchor-placement="top-center" className={`${handelGrid ? '' : 'grid items-center gap-6 pt-6 md:grid-cols-3 pb-14'}`}>
                                     {
                                         records.map(item =>
                                             <div className="">
@@ -276,7 +283,7 @@ const Shop = () => {
                                                     <div className="flex justify-between pt-2 pb-1">
                                                         <h2 className="card-title">
                                                             <StarRatings
-                                                                rating={item?.adminRating}
+                                                                rating={item?.rating}
                                                                 starDimension="25px"
                                                                 starSpacing="5px"
                                                             />
@@ -310,20 +317,20 @@ const Shop = () => {
             <nav>
                 <ul className="flex justify-center gap-2 pb-16 pagination">
                     <li className="page-item">
-                        <a  className="px-6 py-2 font-bold border-2 page-link hover:bg-orange-600 hover:text-white hover:border-orange-600"
+                        <a className="px-6 py-2 font-bold border-2 page-link hover:bg-orange-600 hover:text-white hover:border-orange-600"
                             onClick={prePage}
                         >Prev</a>
                     </li>
                     {
                         numbers.map((n, i) => (
                             <li className={`page-item ${currentPage === n ? 'active' : ''}`} key={i}>
-                                <a  className="px-5 py-2 font-bold border-2 page-link hover:bg-orange-600 hover:text-white hover:border-orange-600"
+                                <a className="px-5 py-2 font-bold border-2 page-link hover:bg-orange-600 hover:text-white hover:border-orange-600"
                                     onClick={() => changeCPage(n)}>{n}</a>
                             </li>
                         ))
                     }
                     <li className="page-item">
-                        <a  className="px-6 py-2 font-bold border-2 page-link hover:bg-orange-600 hover:text-white hover:border-orange-600"
+                        <a className="px-6 py-2 font-bold border-2 page-link hover:bg-orange-600 hover:text-white hover:border-orange-600"
                             onClick={nextPage}
                         >Next</a>
                     </li>

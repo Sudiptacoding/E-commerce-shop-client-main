@@ -1,19 +1,51 @@
 import React, { Component } from 'react';
 import ReactApexChart from 'react-apexcharts';
 import Chart from 'react-apexcharts'
+import useAllPement from '../../hooks/useAllPement';
+import UseMenus from '../../hooks/UseMenus';
+import moment from 'moment';
+import useAllUsers from '../../hooks/useAllUsers';
 
 class ApexChart extends React.Component {
     constructor(props) {
         super(props);
+        const menus = props.menus
+        const categoris = props.categoris
+
+        const prices = categoris.map((category, index) => {
+            const filteredMenus = menus?.filter(menu => menu.category.includes(category));
+            const pricesArray = filteredMenus.map(menu => parseInt(menu.price));
+            return pricesArray;
+        });
+
 
         this.state = {
-            series: [{
-                name: 'series1',
-                data: [31, 40, 28, 51, 42, 109, 100]
-            }, {
-                name: 'series2',
-                data: [11, 32, 45, 32, 34, 52, 41]
-            }],
+            series: [
+                {
+                    name: 'hoodie',
+                    data: prices?.[0]
+                },
+                {
+                    name: 'shirt',
+                    data: prices?.[1]
+                },
+                {
+                    name: 't-shirt',
+                    data: prices?.[2]
+                },
+                {
+                    name: 'cap',
+                    data: prices?.[3]
+                },
+                {
+                    name: 'beg',
+                    data: prices?.[4]
+                },
+
+
+            ],
+
+
             options: {
                 chart: {
                     height: 350,
@@ -25,10 +57,7 @@ class ApexChart extends React.Component {
                 stroke: {
                     curve: 'smooth'
                 },
-                xaxis: {
-                    type: 'datetime',
-                    categories: ["2018-09-19T00:00:00.000Z", "2018-09-19T01:30:00.000Z", "2018-09-19T02:30:00.000Z", "2018-09-19T03:30:00.000Z", "2018-09-19T04:30:00.000Z", "2018-09-19T05:30:00.000Z", "2018-09-19T06:30:00.000Z"]
-                },
+             
                 tooltip: {
                     x: {
                         format: 'dd/MM/yy HH:mm'
@@ -54,13 +83,39 @@ class ApexChart extends React.Component {
 class ApexChart1 extends React.Component {
     constructor(props) {
         super(props);
+        const allpement = props.allpement
+        const categoris = props.categoris
+
+        const prices = categoris.map((category, index) => {
+            const filteredMenus = allpement?.filter(menu => menu.category.includes(category));
+            const pricesArray = filteredMenus?.map(menu => parseInt(menu.price));
+            return pricesArray;
+        });
 
         this.state = {
 
-            series: [{
-                name: "Desktops",
-                data: [10, 41, 35, 51, 49, 62, 69, 91, 148]
-            }],
+            series: [
+                {
+                    name: 'hoodie',
+                    data: prices?.[0]
+                },
+                {
+                    name: "shirt",
+                    data: prices?.[1]
+                },
+                {
+                    name: "t-shirt",
+                    data: prices?.[2]
+                },
+                {
+                    name: "cap",
+                    data: prices?.[3]
+                },
+                {
+                    name: "beg",
+                    data: prices?.[4]
+                },
+            ],
             options: {
                 chart: {
                     height: 350,
@@ -85,9 +140,6 @@ class ApexChart1 extends React.Component {
                         opacity: 0.5
                     },
                 },
-                xaxis: {
-                    categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
-                }
             },
 
 
@@ -113,34 +165,127 @@ class ApexChart1 extends React.Component {
 class App extends Component {
     constructor(props) {
         super(props);
-
+        const categoris = props.categori
+        const allpement = props.allpement
+        const filteredMenus = allpement?.filter(menu => menu.category.includes(categoris));
+        const pricesArray = filteredMenus?.map(menu => parseInt(menu.price));
         this.state = {
             options: {
                 chart: {
                     id: 'apexchart-example'
                 },
                 xaxis: {
-                    categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999]
+                    categories: [categoris]
                 }
             },
-            series: [{
-                name: 'series-1',
-                data: [30, 40, 35, 50, 49, 60, 70, 91, 125]
-            }]
+            series: [
+                {
+                    name: categoris,
+                    data: pricesArray
+                }
+
+            ]
         }
     }
     render() {
         return (
-            <Chart options={this.state.options} series={this.state.series} type="bar" width={500} height={320} />
+            <Chart className='overflow-x-scroll no-scrollbar' options={this.state.options} series={this.state.series} type="bar" height={320} />
         )
     }
 }
+
 const AdminHome = () => {
+    const { isPending, error, allpement, refetch } = useAllPement()
+    const [menus] = UseMenus()
+    const { alluser } = useAllUsers()
+
+    const categoris = ['hoodie', 'shirt', 't-shirt', 'cap', 'beg']
+    const currentTime = moment().format("MMM Do YY")
+    const totalPrice = menus?.reduce((accumulator, item) => accumulator + parseInt(item.price), 0);
+    const totalSell = allpement?.reduce((accumulator, item) => accumulator + parseInt(item?.price * item?.quantity), 0);
+
     return (
-        <div>
-            <ApexChart />
-            <ApexChart1 />
-            <App />
+        <div className='w-full'>
+            <div className="flex items-center justify-center shadow stats">
+
+                <div className="stat place-items-center">
+                    <div className="stat-title">Total product amount</div>
+                    <div className="stat-value">$ {totalPrice}</div>
+                    <div className="stat-desc">{currentTime}</div>
+                </div>
+
+                <div className="stat place-items-center">
+                    <div className="stat-title">Total sell price</div>
+                    <div className="stat-value text-secondary">$ {totalSell}</div>
+                    <div className="stat-desc text-secondary">↗︎ {totalPrice} ({((totalPrice / totalSell) * 100).toFixed(2)}%)</div>
+
+                </div>
+
+                <div className="stat place-items-center">
+                    <div className="stat-title">New Registers</div>
+                    <div className="stat-value">{alluser?.length}</div>
+                    <div className="stat-desc">Total {alluser?.length} user visit </div>
+                </div>
+
+            </div>
+            <div className="">
+                <div className='py-10 text-center'><p className='font-mono text-2xl font-bold'>Product Details</p></div>
+                <div className='w-full border'>
+                    <div className="">
+                        <div className='grid w-full grid-cols-2 overflow-y-auto lg:grid-cols-4 md:grid-cols-3'>
+                            {categoris.map((category, index) => {
+                                const filteredMenus = menus?.filter(menu => menu.category.includes(category));
+                                return (
+                                    <div key={index}>
+                                        <div className="border stat">
+                                            <div className="stat-figure text-secondary">
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="inline-block w-8 h-8 stroke-current"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                                            </div>
+                                            <div className="stat-title">{category.toUpperCase()}</div>
+                                            <div className="stat-value text-secondary">{filteredMenus?.length} Items</div>
+                                            <div className="stat-desc">{(filteredMenus?.length / 100) * menus?.length}% because total items {menus?.length}</div>
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </div>
+                </div>
+                <div className='py-10 text-center'><p className='font-mono text-2xl font-bold'>Sell Details</p></div>
+                <div className='w-full border'>
+                    <div className="">
+                        <div className='grid w-full grid-cols-2 overflow-y-auto lg:grid-cols-4 md:grid-cols-3'>
+                            {categoris.map((category, index) => {
+                                const filteredMenus = allpement?.filter(menu => menu.category.includes(category));
+                                const totalQuantity = filteredMenus?.reduce((accumulator, item) => accumulator + parseInt(item.quantity), 0);
+                                return (
+                                    <div key={index}>
+
+                                        <div className="stat">
+                                            <div className="stat-figure text-secondary">
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="inline-block w-8 h-8 stroke-current"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                                            </div>
+                                            <div className="font-bold stat-title">{category.toUpperCase()}</div>
+                                            <div className="stat-value ">{totalQuantity} Items</div>
+                                            <div className="stat-desc text-secondary">{(filteredMenus?.length / 100) * menus?.length}% because total items {menus?.length}</div>
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <ApexChart allpement={allpement} menus={menus} categoris={categoris} />
+            <ApexChart1 allpement={allpement} menus={menus} categoris={categoris} />
+            <div className=''>
+                {
+                    categoris?.map((item, i) => {
+                        return <App key={i} allpement={allpement} menus={menus} categori={item} />
+                    })
+                }
+            </div>
         </div>
     );
 };

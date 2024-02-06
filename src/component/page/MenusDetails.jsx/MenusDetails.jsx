@@ -117,7 +117,7 @@ const MenusDetails = (cata) => {
                         </div>
                     </ReactCarousel>
                 </div>
-                <div>
+                <div className="z-0">
                     <h1 className="text-3xl font-bold text-gray-900 font-rubik">{menusdetail?.name}</h1>
                     <h1 className="py-2 text-lg font-medium font-rubik">Cattegory: <span className="text-xl font-bold font-rubik">{menusdetail?.category}</span> </h1>
                     <h1 className="py-1 text-2xl text-gray-600 font-rubik">{menusdetail?.title}</h1>

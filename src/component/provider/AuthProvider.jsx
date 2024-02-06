@@ -41,13 +41,14 @@ const AuthProvider = ({ children }) => {
                     email: currentUser.email,
                     name: currentUser.displayName,
                     img: currentUser.photoURL,
+                    status: 'user'
                 };
                 axiosData.post('/user', userEmail)
                     .then((res) => {
                         console.log(res.data)
                     })
             } else {
-                
+
             }
 
             setLoading(false);

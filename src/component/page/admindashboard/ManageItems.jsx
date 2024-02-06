@@ -6,6 +6,7 @@ import UserAxiosSecure from '../../hooks/UserAxiosSecure'
 import { TiDelete } from 'react-icons/ti'
 import toast from 'react-hot-toast'
 import Swal from 'sweetalert2'
+import StarRatings from 'react-star-ratings'
 
 const ManageItems = () => {
     const [menus, refetch, loading] = UseMenus()
@@ -30,7 +31,7 @@ const ManageItems = () => {
     const [image3, setImage3] = useState('')
     const [image4, setImage4] = useState('')
 
-
+    const [ratings, setRating] = useState(0)
     const handelFileData = (e) => {
         const imgbbApiKey = '48262f7096c971f7f2f1b695ae2a6be0';
         const selectedFile = e.target.files[0];
@@ -88,7 +89,7 @@ const ManageItems = () => {
             const category = e.target.category.value;
             const size = e.target.size.value;
             const details = e.target.details.value;
-            const rating = 0;
+            const rating = ratings || editItem?.rating;
             const customerReviews = editItem?.customerReviews;
             const image = [image1 || editItem?.image?.[0], image2 || editItem?.image?.[1], image3 || editItem?.image?.[2], image4 || editItem?.image?.[3]]
             const data = { name, price, title, category, details, image, rating, customerReviews, size }
@@ -97,6 +98,7 @@ const ManageItems = () => {
                     refetch()
                     document.getElementById('my_modal_10').close()
                     e.target.reset()
+                    setRating(0)
                     Swal.fire({
                         title: "Good job!",
                         text: "You item update successfully",
@@ -145,9 +147,9 @@ const ManageItems = () => {
 
 
     return (
-        <div className=" w-full">
+        <div className="w-full ">
             <div className="py-12 text-center">
-                <h1 className="pb-2 md:text-2xl text-xl font-bold text-blue-600">Add some Itesm</h1>
+                <h1 className="pb-2 text-xl font-bold text-blue-600 md:text-2xl">Add some Itesm</h1>
                 <p className="md:text-xl">if you want to add some items you can add.</p>
             </div>
             <div class="relative ml-3 w-full overflow-x-auto sm:rounded-lg">
@@ -181,7 +183,7 @@ const ManageItems = () => {
                                     menus?.map((item, i) => {
                                         return <tr key={i}>
                                             <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                <img className='w-16 rounded-full h-16' src={item?.image?.[0]} alt="" />
+                                                <img className='w-16 h-16 rounded-full' src={item?.image?.[0]} alt="" />
                                             </th>
                                             <td class="px-6 py-4">
                                                 {item?.name}
@@ -201,7 +203,7 @@ const ManageItems = () => {
                                         </tr>
                                     })
                                 }
-                            </> : <div className='text-2xl text-center top-10 w-full flex items-center justify-center'><p className='text-center'>No item here</p></div>
+                            </> : <div className='flex items-center justify-center w-full text-2xl text-center top-10'><p className='text-center'>No item here</p></div>
                         }
 
                     </tbody>
@@ -211,10 +213,10 @@ const ManageItems = () => {
             {/* Edit item */}
 
             <dialog id="my_modal_10" className="modal">
-                <div className="modal-box w-11/12 max-w-5xl">
+                <div className="w-11/12 max-w-5xl modal-box">
                     <form method="dialog">
                         {/* if there is a button in form, it will close the modal */}
-                        <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                        <button className="absolute btn btn-sm btn-circle btn-ghost right-2 top-2">✕</button>
                     </form>
                     <div className="w-full">
                         <div className="px-12">
@@ -292,6 +294,22 @@ const ManageItems = () => {
                                     </div>
                                 </div>
                                 {/* recipi */}
+
+                                <label className="form-control">
+                                    <div className="label">
+                                        <span className="text-lg font-medium">Product rating {editItem?.rating || 0}⭐</span>
+                                    </div>
+                                    <StarRatings
+                                        rating={ratings}
+                                        starRatedColor="blue"
+                                        changeRating={setRating}
+                                        numberOfStars={5}
+                                        name='rating'
+                                    />
+                                </label>
+
+
+
                                 <label className="form-control">
                                     <div className="label">
                                         <span className="text-lg font-medium">Product Details</span>
