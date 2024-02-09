@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { AuthContext } from "../../provider/AuthProvider";
 import React from 'react';
 import signupimg from "../../../../public/image/signupimg.png"
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const SignUp = () => {
     const { signup, signInWithGoogle } = useContext(AuthContext)
@@ -38,13 +38,13 @@ const SignUp = () => {
     };
 
     return (
-        <div className="grid h-screen py-20 px-12 gap-10 items-center md:grid-cols-2">
+        <div className="grid items-center h-screen gap-10 px-12 py-20 md:grid-cols-2">
             <div>
                 <img className="rounded-xl h-[750px]" src={signupimg} alt="" />
             </div>
             <section className="bg-gray-1 rounded-xl  shadow-2xl shadow-[#d5dadc] ...   dark:bg-dark lg:py-[10px]">
                 <div className="container mx-auto">
-                    <div className="-mx-4 flex flex-wrap">
+                    <div className="flex flex-wrap -mx-4">
                         <div className="w-full px-4">
                             <div className="relative mx-auto max-w-[525px] overflow-hidden rounded-lg bg-white px-10 py-16 text-center dark:bg-dark-2 sm:px-12 md:px-[60px]">
                                 <div className="mb-10 text-center md:mb-16">
@@ -79,16 +79,16 @@ const SignUp = () => {
                                             <a href="#" className="label-text-alt link link-hover">Forgot password?</a>
                                         </label>
                                     </div>
-                                    <div className="form-control mt-6">
-                                        <button className="w-full cursor-pointer rounded-md border bg-orange-500 border-ora500bg-orange-500 hover:border-orange-500 shadow-lg shadow-orange-500/50 hover:bg-orange-500 px-5 py-3 text-base font-medium text-white transition hover:bg-opacity-90">Sign Up</button>
+                                    <div className="mt-6 form-control">
+                                        <button className="w-full px-5 py-3 text-base font-medium text-white transition bg-orange-500 border rounded-md shadow-lg cursor-pointer border-ora500bg-orange-500 hover:border-orange-500 shadow-orange-500/50 hover:bg-orange-500 hover:bg-opacity-90">Sign Up</button>
                                     </div>
                                 </form>
                                 {/*  */}
 
                                 <p className="mb-6 text-base text-secondary-color dark:text-dark-7">
-                                    <div className="divider font-bold text-orange-500">Or</div>
+                                    <div className="font-bold text-orange-500 divider">Or</div>
                                 </p>
-                                <ul className="-mx-2 mb-12 flex justify-between">
+                                <ul className="flex justify-between mb-12 -mx-2">
                                     <div className="w-full px-2">
                                         <li>
                                             <a
@@ -134,12 +134,11 @@ const SignUp = () => {
                                 </ul>
                                 <p className="text-base text-body-color dark:text-dark-6">
                                     <span className="pr-0.5"> have any account? </span>
-                                    <a
-                                        href="/signin"
-                                        className="text-orange-500 font-bold underline"
+                                    <Link to={'/signin'}
+                                        className="font-bold text-orange-500 underline"
                                     >
                                         Sign In
-                                    </a>
+                                    </Link>
                                 </p>
                                 <div>
                                 </div>

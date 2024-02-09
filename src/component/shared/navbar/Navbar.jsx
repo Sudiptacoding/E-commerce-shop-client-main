@@ -6,12 +6,14 @@ import Category from "../../page/category/Category"
 import './navbar.css';
 import { useContext } from "react"
 import { AuthContext } from "../../provider/AuthProvider"
+import useAllUsers from "../../hooks/useAllUsers"
 
 
 
 const Navbar = () => {
-
     const { user } = useContext(AuthContext)
+    const { isPending, error, alluser, refetch } = useAllUsers()
+    const isAdmin = alluser?.find(u => u.email === user?.email)
 
     const navLinks = <>
         <li className='font-semibold nav-link lg:text-black'><NavLink to="/">Home</NavLink></li>
@@ -20,10 +22,10 @@ const Navbar = () => {
         <li className='font-semibold lg:text-black nav-link'><NavLink to="/aboutus">About Us</NavLink></li>
         <li className='font-semibold lg:text-black nav-link'><NavLink to="/contact">Contact</NavLink></li>
         {
-            user?.email != 'sudiptabiswas506@gmaila.com'  ? <>
+            isAdmin?.status === 'admin' ? <>
                 <li className='font-semibold lg:text-black nav-link'><NavLink to="/adminDashboard">Dashboard</NavLink></li>
             </> : <>
-            <li className='font-semibold lg:text-black nav-link'><NavLink to="/userdashboard">Dashboard</NavLink></li>
+                <li className='font-semibold lg:text-black nav-link'><NavLink to="/userdashboard">Dashboard</NavLink></li>
             </>
         }
     </>

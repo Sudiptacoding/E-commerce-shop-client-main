@@ -11,7 +11,8 @@ const UserProfile = () => {
     const { user, logOut } = useContext(AuthContext);
     const { isPending, error, addtocard, refetch } = useAllAddtoCard()
     const { addtolove } = useAllAddtoLove()
-
+  
+    console.log(addtocard , addtolove)
     const handleLogOut = () => {
         logOut()
             .then(() => { })
@@ -19,28 +20,28 @@ const UserProfile = () => {
     }
 
     return (
-        <div > 
-            <div className="bg-white p-7 rounded-xl m-12 shadow-xl">
-                <div className=" flex justify-between">
+        <div >
+            <div className="m-12 bg-white shadow-xl p-7 rounded-xl">
+                <div className="flex justify-between ">
                     <div>
                         <Profilepicture></Profilepicture>
-                        <h1 className="text-2xl py-1 font-medium pt-2">Safayet Ahmed</h1>
-                        <p>asafayet21@gmail.com</p>
+                        <h1 className="py-1 pt-2 text-2xl font-medium">{user?.displayName}</h1>
+                        <p>{user?.email}</p>
                     </div>
-                        {
-                            user? <p><button onClick={handleLogOut} className=" px-4 py-2 font-medium text-center text-black border hover:bg-red-500 hover:text-white">Sign out</button> </p> : ""
-                        }
+                    {
+                        user ? <p><button onClick={handleLogOut} className="px-4 py-2 font-medium text-center text-black border hover:bg-red-500 hover:text-white">Sign out</button> </p> : ""
+                    }
                 </div>
 
                 {/*  */}
-                <div className="grid grid-cols-3 pt-10 items-center gap-6">
+                <div className="grid items-center grid-cols-3 gap-6 pt-10">
                     <div className="indicator">
-                        <button className="text-lg border rounded-lg p-10"> <FaCartShopping className="text-4xl"  /></button>
-                        <span className="border px-2 rounded-full bg-black text-white indicator-item">+{addtocard?.length}</span>
+                        <button className="p-10 text-lg border rounded-lg"> <FaCartShopping className="text-4xl" /></button>
+                        <span className="px-2 text-white bg-black border rounded-full indicator-item">+{addtocard?.length}</span>
                     </div>
                     <div className="indicator">
-                        <button className="text-lg border rounded-lg p-10"> <FaRegHeart className="text-4xl"  /></button>
-                        <span className="border px-2 rounded-full  bg-black text-white indicator-item">+{addtolove?.length}</span>
+                        <button className="p-10 text-lg border rounded-lg"> <FaRegHeart className="text-4xl" /></button>
+                        <span className="px-2 text-white bg-black border rounded-full indicator-item">+{addtolove?.length}</span>
                     </div>
                 </div>
             </div>

@@ -15,12 +15,12 @@ import { initializeApp } from "firebase/app";
 
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyA8-dsbrSbuxb9HykjU1dK6_FYVh5IySyg",
-  authDomain: "huge-icons.firebaseapp.com",
-  projectId: "huge-icons",
-  storageBucket: "huge-icons.appspot.com",
-  messagingSenderId: "871615865020",
-  appId: "1:871615865020:web:a04a44e11530a8149cf0b9"
+  apiKey: "AIzaSyCHTLkLDxZUTXMAakia7jYUV6Lcd2dCCB4",
+  authDomain: "e-commers-webside.firebaseapp.com",
+  projectId: "e-commers-webside",
+  storageBucket: "e-commers-webside.appspot.com",
+  messagingSenderId: "969150754568",
+  appId: "1:969150754568:web:0155a1288c6ba4dde0c6bd"
 };
 
 // Initialize Firebase

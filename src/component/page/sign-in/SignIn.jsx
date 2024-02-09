@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import signin from "../../../../public/image/singin.png"
 import { AuthContext } from "../../provider/AuthProvider";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 
 const SignIn = () => {
@@ -39,13 +39,13 @@ const SignIn = () => {
 
 
     return (
-        <div className="grid h-screen py-20 px-12 gap-10 items-center md:grid-cols-2">
+        <div className="grid items-center h-screen gap-10 px-12 py-20 md:grid-cols-2">
             <div>
                 <img className="rounded-xl h-[750px]" src={signin} alt="" />
             </div>
             <section className="bg-gray-1 rounded-xl  shadow-2xl shadow-[#d5dadc] ...   dark:bg-dark lg:py-[10px]">
                 <div className="container mx-auto">
-                    <div className="-mx-4 flex flex-wrap">
+                    <div className="flex flex-wrap -mx-4">
                         <div className="w-full px-4">
                             <div className="relative mx-auto max-w-[525px] overflow-hidden rounded-lg bg-white px-10 py-16 text-center dark:bg-dark-2 sm:px-12 md:px-[60px]">
                                 <div className="mb-10 text-center md:mb-16">
@@ -74,7 +74,7 @@ const SignIn = () => {
                                             <a href="#" className="label-text-alt link link-hover">Forgot password?</a>
                                         </label>
                                     </div>
-                                    <div className="form-control mt-6">
+                                    <div className="mt-6 form-control">
                                         <button className="w-full cursor-pointer rounded-md border bg-[#12D1E5] border-[#12D1E5] hover:border-[#04e6ff] shadow-lg shadow-cyan-500/50 hover:bg-[#04e6ff] px-5 py-3 text-base font-medium text-white transition hover:bg-opacity-90">Login</button>
                                     </div>
                                 </form>
@@ -83,7 +83,7 @@ const SignIn = () => {
                                 <p className="mb-6 text-base text-secondary-color dark:text-dark-7">
                                     <div className="divider font-bold text-[#12D1E5]">Or</div>
                                 </p>
-                                <ul className="-mx-2 mb-12 flex justify-between">
+                                <ul className="flex justify-between mb-12 -mx-2">
                                     <li className="w-full px-2">
                                         <a
                                             href="/#"
@@ -126,12 +126,11 @@ const SignIn = () => {
                                 </ul>
                                 <p className="text-base text-body-color dark:text-dark-6">
                                     <span className="pr-0.5">Don't have any account? </span>
-                                    <a
-                                        href="/signup"
+                                    <Link to={'/signup'}
                                         className="text-[#4ab9c3] font-bold underline"
                                     >
                                         Sign Up
-                                    </a>
+                                    </Link>
                                 </p>
                             </div>
                         </div>
